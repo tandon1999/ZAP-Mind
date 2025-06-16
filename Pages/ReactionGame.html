@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reaction Time Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f0f0f0;
+    }
+    #gameBox {
+      width: 300px;
+      height: 300px;
+      background-color: red;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: white;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+    #stats {
+      margin-top: 20px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div id="gameBox">Click to start</div>
+  <div id="stats"></div>
+
+  <script>
+    const gameBox = document.getElementById("gameBox");
+    const stats = document.getElementById("stats");
+
+    let startTime;
+    let timeout;
+    let waiting = false;
+    let results = [];
+
+    function resetBox(text = "Click to start", color = "red") {
+      gameBox.textContent = text;
+      gameBox.style.backgroundColor = color;
+    }
+
+    function startWaiting() {
+      waiting = true;
+      resetBox("Wait for green...", "red");
+      const delay = Math.floor(Math.random() * 3000) + 1000; // 1s to 4s
+      timeout = setTimeout(() => {
+        startTime = new Date().getTime();
+        resetBox("CLICK!", "green");
+        waiting = false;
+      }, delay);
+    }
+
+    gameBox.addEventListener("click", () => {
+      if (gameBox.style.backgroundColor === "green") {
+        const reactionTime = new Date().getTime() - startTime;
+        results.push(reactionTime);
+        resetBox(`Your time: ${reactionTime} ms`, "blue");
+        updateStats();
+      } else if (waiting) {
+        clearTimeout(timeout);
+        resetBox("Too soon! Try again.", "orange");
+      } else {
+        startWaiting();
+      }
+    });
+
+    function updateStats() {
+      const average = Math.round(results.reduce((a, b) => a + b) / results.length);
+      stats.textContent = `Attempts: ${results.length}, Average time: ${average} ms`;
+    }
+  </script>
+</body>
+</html>

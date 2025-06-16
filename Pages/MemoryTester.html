@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Memory Tester</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #instruction {
+            font-weight: bold;
+            margin: 15px 0;
+            font-size: 1.1em;
+        }
+
+        #image-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .image-box {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+        }
+
+        #name-options {
+            display: none;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .name-button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #eee;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .name-button.correct {
+            background-color: #a8f0a5;
+        }
+
+        .name-button.wrong {
+            background-color: #f7a8a8;
+        }
+
+        #message {
+            font-size: 1.2em;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+
+        #restart-btn {
+            margin-top: 30px;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Memory Tester</h1>
+    <div id="instruction"></div>
+    <div id="image-container"></div>
+    <div id="name-options"></div>
+    <div id="message"></div>
+    <button id="restart-btn">Start New Game</button>
+
+    <script>
+        const API_KEY = 'csui8ztEOzZbsejOxg4u16Yu5PdOHXzjkxcOTWFe5TiGtgJBIUGY0p3M'; 
+
+        const objectList = [
+            "Apple", "Dog", "Chair", "Car", "Book", "Phone", "Camera", "Tree", "Bicycle", "Clock",
+            "Cup", "Bottle", "Computer", "Shoe", "Pen", "Lamp", "Pizza", "Cat", "Orange", "Watch",
+            "Table", "Bag", "Fan", "Glasses", "Laptop", "Towel", "Mirror", "Brush", "Toothpaste", "Ball",
+            "Helmet", "Notebook", "Pencil", "Scissors", "Microwave", "TV", "Remote", "Spoon", "Fork", "Plate",
+            "Mug", "Ruler", "Glove", "Hat", "Sock", "Candle", "Calendar", "Speaker", "Mouse", "Keyboard",
+            "Stapler", "Paper", "Bottle", "Pillow", "Blanket", "Curtain", "Toaster", "Blender", "Iron", "Kettle",
+            "Fridge", "Oven", "Dish", "Pan", "Pot", "Knife", "Tissue", "Soap", "Shampoo", "Charger",
+            "Cable", "Plug", "Bulb", "Fan", "Heater", "Bin", "Door", "Window", "Couch", "Bed",
+            "Drawer", "Shelf", "Key", "Wallet", "Watch", "Ring", "Bracelet", "Earrings", "Necklace", "Belt",
+            "Tie", "Jacket", "Shirt", "Jeans", "Shorts", "Skirt", "Umbrella", "Raincoat", "Glasses", "Mask",
+            "Sanitizer", "Medicine", "Bandage", "Thermometer", "Comb", "Deodorant", "Perfume", "Nailcutter", "Clip", "Brush",
+            "Paint", "Bucket", "Mop", "Broom", "Dustbin", "Laptop", "Tablet", "Mobile", "Headphones", "Charger",
+            "Camera", "Tripod", "Mic", "Speaker", "Router", "Switch", "Calculator", "Whiteboard", "Marker", "Chalk",
+            "Duster", "Bag", "Shoes", "Slippers", "Sneakers", "Toy", "Puzzle", "Gamepad", "Joystick", "Controller",
+            "Drum", "Guitar", "Piano", "Violin", "Trumpet", "Flute", "Balloon", "Gift", "Cake", "Icecream",
+            "Cookie", "Sandwich", "Burger", "Fries", "Donut", "Milk", "Juice", "Soda", "Tea", "Coffee"
+        ];
+
+
+        const totalNameOptions = 12;
+        const displayTime = 6000;
+
+        const imageContainer = document.getElementById("image-container");
+        const nameOptions = document.getElementById("name-options");
+        const message = document.getElementById("message");
+        const restartBtn = document.getElementById("restart-btn");
+        const instruction = document.getElementById("instruction");
+
+        let shownObjects = [];
+        let maxClicksAllowed = 0;
+        let clickCount = 0;
+        let gameOver = false;
+
+        async function fetchPexelsImage(query) {
+            const res = await fetch(`https://api.pexels.com/v1/search?query=${query}&per_page=1`, {
+                headers: {
+                    Authorization: API_KEY
+                }
+            });
+            const data = await res.json();
+            return data.photos?.[0]?.src?.medium || `https://via.placeholder.com/120?text=${query}`;
+        }
+
+        async function startGame() {
+            imageContainer.innerHTML = "";
+            nameOptions.innerHTML = "";
+            nameOptions.style.display = "none";
+            message.textContent = "";
+            message.style.color = "";
+            instruction.textContent = "";
+            clickCount = 0;
+            gameOver = false;
+
+            const imageCount = Math.floor(Math.random() * 2) + 6; // 6 or 7 images
+            const shuffled = [...objectList].sort(() => 0.5 - Math.random());
+            shownObjects = shuffled.slice(0, imageCount);
+            maxClicksAllowed = imageCount + 2; // Allow 2 extra wrong picks
+
+            instruction.textContent = `You have to correctly choose ${imageCount} items to win. You get 2 extra wrong guesses!`;
+
+            for (let obj of shownObjects) {
+                const img = document.createElement("img");
+                img.className = "image-box";
+                img.alt = obj;
+                img.src = await fetchPexelsImage(obj);
+                imageContainer.appendChild(img);
+            }
+
+            setTimeout(() => {
+                imageContainer.innerHTML = "";
+                showNameOptions();
+            }, displayTime);
+        }
+
+        function showNameOptions() {
+            nameOptions.style.display = "flex";
+
+            const wrongOptions = objectList
+                .filter(obj => !shownObjects.includes(obj))
+                .sort(() => 0.5 - Math.random())
+                .slice(0, totalNameOptions - shownObjects.length);
+
+            const allOptions = [...shownObjects, ...wrongOptions].sort(() => 0.5 - Math.random());
+
+            allOptions.forEach(name => {
+                const btn = document.createElement("button");
+                btn.className = "name-button";
+                btn.textContent = name;
+
+                btn.onclick = () => {
+                    if (gameOver || btn.disabled) return;
+
+                    clickCount++;
+
+                    if (shownObjects.includes(name)) {
+                        btn.classList.add("correct");
+                    } else {
+                        btn.classList.add("wrong");
+                    }
+                    btn.disabled = true;
+
+                    const correctSelected = document.querySelectorAll(".name-button.correct").length;
+
+                    if (correctSelected === shownObjects.length) {
+                        gameOver = true;
+                        message.textContent = "You win!";
+                        message.style.color = "green";
+                        disableRemainingButtons();
+                    }
+
+                    if (clickCount >= maxClicksAllowed && !gameOver) {
+                        gameOver = true;
+                        message.textContent = "You lose!";
+                        message.style.color = "red";
+                        disableRemainingButtons();
+                    }
+                };
+
+                nameOptions.appendChild(btn);
+            });
+        }
+
+        function disableRemainingButtons() {
+            document.querySelectorAll(".name-button").forEach(btn => btn.disabled = true);
+        }
+
+        restartBtn.onclick = () => startGame();
+        startGame();
+    </script>
+</body>
+
+</html>

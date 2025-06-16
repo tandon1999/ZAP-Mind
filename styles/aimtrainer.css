@@ -1,0 +1,192 @@
+/* Global */
+body {
+  font-family: Arial, sans-serif;
+  background: #f0f8ff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  user-select: none;
+  min-height: 100vh;
+  margin: 0;
+}
+h1 {
+  margin-bottom: 20px;
+  color: #333;
+  font-weight: 700;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+/* Wrapper as Card */
+#gameWrapper {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 1200px;
+  align-items: stretch;
+  background: linear-gradient(135deg, #ffffff, #e8f5e9);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+/* Game Container */
+#gameContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  background: #fafafa;
+  border-radius: 12px;
+  padding: 16px;
+  transition: transform 0.3s ease;
+}
+#gameContainer:hover {
+  transform: translateY(-5px);
+}
+
+/* Game Area */
+#gameArea {
+  position: relative;
+  width: 100%;
+  height: 350px;
+  background: #c8e6c9;
+  border-radius: 12px;
+  box-shadow: inset 0 0 10px rgba(0,0,0,0.1);
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+/* Target */
+#target {
+  position: absolute;
+  width: 50px; height: 50px;
+  background: #ff4d4d; border-radius: 50%;
+  display: flex; justify-content: center; align-items: center;
+  font-size: 28px; color: white; cursor: pointer;
+  box-shadow: 0 0 8px rgba(255,0,0,0.6);
+  transition: background-color 0.2s, transform 0.2s;
+}
+#target:active {
+  background-color: #cc0000;
+  box-shadow: 0 0 12px rgba(204,0,0,0.9);
+  transform: scale(0.9);
+}
+
+/* Score Board inside Game Area */
+#scoreBoard {
+  position: absolute;
+  top: 0; right: 0;
+  width: 150px; height: 100%;
+  background: rgba(255,255,255,0.9);
+  border-radius: 0 12px 12px 0;
+  box-shadow: 0 0 12px rgba(0,128,0,0.3);
+  display: flex; justify-content: center; align-items: center;
+  font-size: 36px; font-weight: 800; color: #388e3c;
+  pointer-events: none;
+}
+
+/* Start/Try Button */
+#startBtn {
+  margin-top: 10px;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, #81c784, #388e3c);
+  color: white; border: none; border-radius: 8px;
+  font-size: 18px; cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none; align-self: center;
+}
+#startBtn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+#startBtn:disabled {
+  background: #a5d6a7;
+  cursor: not-allowed;
+}
+
+/* Side Panel */
+#sidePanel {
+  flex: 0 0 250px;
+  display: flex; flex-direction: column; gap: 20px;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  align-items: center;
+}
+#sidePanel > div {
+  width: 100%;
+  display: flex; align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+}
+#timer::before   { content: "⏱️"; margin-right: 8px; }
+#avgTime::before { content: "⏲️"; margin-right: 8px; }
+#message::before { content: "💬";  margin-right: 8px; }
+#message::before {
+  content: "💬";
+  margin-right: 8px;
+}
+#message.finished::before {
+  content: "🎉"; 
+  margin-right: 8px;
+}
+
+
+#timer {
+  font-size: 20px; color: #555;
+}
+#avgTime {
+  font-size: 20px; font-weight: 600; color: #666;
+}
+#message {
+  font-size: 22px; font-weight: 600; color: #333;
+  min-height: 50px; transition: color 0.4s ease;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  #gameWrapper {
+    flex-direction: column;
+  }
+  #sidePanel {
+    width: 100%;
+    order: -1;
+    margin-bottom: 20px;
+  }
+  #gameArea { height: 300px; }
+  #scoreBoard {
+    width: 120px;
+    font-size: 28px;
+  }
+  #target {
+    width: 40px; height: 40px;
+    font-size: 24px;
+  }
+  #startBtn {
+    font-size: 16px;
+    padding: 12px 32px;
+  }
+}
+
+@media (max-width: 480px) {
+  #gameArea { height: 250px; }
+  #scoreBoard {
+    width: 100px;
+    font-size: 24px;
+  }
+  #target {
+    width: 32px; height: 32px;
+    font-size: 20px;
+  }
+  #startBtn {
+    font-size: 14px;
+    padding: 10px 24px;
+  }
+  #sidePanel > div {
+    font-size: 16px;
+  }
+}

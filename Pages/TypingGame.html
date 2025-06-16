@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Typing Game - Paragraph</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: #f7f7f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        #paragraph {
+            max-width: 600px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            user-select: none;
+        }
+
+        #inputArea {
+            width: 600px;
+            height: 150px;
+            padding: 10px;
+            font-size: 1.2rem;
+            border-radius: 8px;
+            border: 2px solid #ccc;
+            outline: none;
+            resize: none;
+        }
+
+
+        #inputArea.correct {
+            border-color: green;
+        }
+
+        #inputArea.incorrect {
+            border-color: orange;
+        }
+
+        #results {
+            margin-top: 30px;
+            font-size: 1.2rem;
+        }
+
+        #restartBtn {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 6px;
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+        }
+
+        .correct-char {
+            color: green;
+        }
+
+        .incorrect-char {
+            color: orange;
+        }
+
+        .results-container {
+            background: #e0ffe0;
+            border: 2px solid #4caf50;
+            padding: 20px 30px;
+            border-radius: 12px;
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2e7d32;
+        }
+
+        .results-container h2 {
+            margin-bottom: 15px;
+            font-weight: 700;
+            font-size: 1.8rem;
+        }
+
+        .results-container p {
+            font-size: 1.2rem;
+            margin: 8px 0;
+        }
+
+        .results-container p strong {
+            color: #1b5e20;
+        }
+
+        .results-container p span {
+            font-weight: 600;
+            color: #388e3c;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Typing Game - Paragraph</h1>
+
+    <div id="paragraph"></div>
+
+    <input type="textatea" id="inputArea" placeholder="Start typing here..." autocomplete="off" autofocus />
+
+    <div id="results"></div>
+
+    <button id="restartBtn">Restart</button>
+
+    <script>
+        const paragraphText = `Typing games are a fun way to improve your speed and accuracy. 
+Practice regularly to see your progress. Make sure to focus on typing correctly rather than just quickly.`;
+
+        const paragraphDiv = document.getElementById('paragraph');
+        const inputArea = document.getElementById('inputArea');
+        const resultsDiv = document.getElementById('results');
+        const restartBtn = document.getElementById('restartBtn');
+
+        let startTime = null;
+        let finished = false;
+
+        function displayParagraph() {
+            paragraphDiv.innerHTML = '';
+            for (let char of paragraphText) {
+                const span = document.createElement('span');
+                span.textContent = char;
+                paragraphDiv.appendChild(span);
+            }
+        }
+
+        function calculateWPM(charsTyped, timeInSeconds) {
+            const wordsTyped = charsTyped / 5;
+            return Math.round((wordsTyped / timeInSeconds) * 60);
+        }
+
+        function resetGame() {
+            finished = false;
+            inputArea.value = '';
+            resultsDiv.textContent = '';
+            inputArea.disabled = false;
+            inputArea.classList.remove('correct', 'incorrect');
+            displayParagraph();
+            startTime = null;
+            inputArea.focus();
+        }
+
+        inputArea.addEventListener('input', () => {
+            if (finished) return;
+
+            if (!startTime) {
+                startTime = new Date();
+            }
+
+            const input = inputArea.value;
+            const spans = paragraphDiv.querySelectorAll('span');
+            let correctChars = 0;
+            let hasMistake = false;
+
+            spans.forEach((span, idx) => {
+                const typedChar = input[idx];
+                if (typedChar == null) {
+                    span.classList.remove('correct-char', 'incorrect-char');
+                } else if (typedChar === span.textContent) {
+                    span.classList.add('correct-char');
+                    span.classList.remove('incorrect-char');
+                    correctChars++;
+                } else {
+                    span.classList.add('incorrect-char');
+                    span.classList.remove('correct-char');
+                    hasMistake = true;
+                }
+            });
+
+            if (hasMistake) {
+                inputArea.classList.add('incorrect');
+                inputArea.classList.remove('correct');
+            } else {
+                inputArea.classList.add('correct');
+                inputArea.classList.remove('incorrect');
+            }
+
+            if (input.length === paragraphText.length) {
+                finished = true;
+                inputArea.disabled = true;
+
+                const endTime = new Date();
+                const timeTaken = (endTime - startTime) / 1000; // seconds
+                const wpm = calculateWPM(input.length, timeTaken);
+
+                resultsDiv.innerHTML = `
+                <div class="results-container">
+                    <h2>🎉 You finished!</h2>
+                    <p><strong>Time taken:</strong> <span>${timeTaken.toFixed(2)} seconds</span></p>
+                    <p><strong>Words per minute (WPM):</strong> <span>${wpm}</span></p>
+                    <p><strong>Accuracy:</strong> <span>${((correctChars / paragraphText.length) * 100).toFixed(2)}%</span></p>
+                </div>
+                `;
+
+            }
+        });
+
+        restartBtn.addEventListener('click', resetGame);
+        resetGame();
+    </script>
+
+</body>
+
+</html>

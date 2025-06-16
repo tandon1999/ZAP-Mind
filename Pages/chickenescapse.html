@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chicken Escape</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #d0f4ff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin: 20px 0;
+      font-size: 2rem;
+      color: #333;
+    }
+
+    #gameContainer {
+      position: relative;
+      background: #f5ffe0;
+      width: 90vw;
+      max-width: 600px;
+      height: 300px;
+      border: 4px solid #ffb347;
+      border-radius: 15px;
+      overflow: hidden;
+    }
+
+    #chicken {
+      position: absolute;
+      bottom: 20px;
+      left: 20px;
+      font-size: 2.5rem;
+      transform: rotate(0deg);
+      transition: transform 0.2s ease, bottom 0.2s ease;
+    }
+
+    #obstacle {
+      position: absolute;
+      bottom: 20px;
+      right: -60px;
+      font-size: 2rem;
+      animation: moveObstacle 3s linear infinite;
+    }
+
+    @keyframes moveObstacle {
+      0% {
+        right: -60px;
+      }
+
+      100% {
+        right: 100%;
+      }
+    }
+
+    #score {
+      margin-top: 10px;
+      font-size: 1.2rem;
+      color: #333;
+    }
+
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #ff9800;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background: #ffc966;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+      #gameContainer {
+        height: 220px;
+      }
+
+      #chicken {
+        font-size: 2rem;
+      }
+
+      #obstacle {
+        font-size: 1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>🐔 Chicken Escape</h1>
+  <div id="gameContainer">
+    <div id="chicken">🐔</div>
+    <div id="obstacle">💩</div>
+  </div>
+  <div id="score">Score: 0</div>
+  <button id="startBtn">Start Escape</button>
+
+  <script>
+    const chicken = document.getElementById('chicken');
+    const obstacle = document.getElementById('obstacle');
+    const scoreDisplay = document.getElementById('score');
+    const startBtn = document.getElementById('startBtn');
+
+    let score = 0;
+    let gameRunning = false;
+    let flapInterval;
+    let collisionCheck;
+
+    function flap() {
+      if (!gameRunning) return;
+      chicken.style.bottom = '100px';
+      chicken.style.transform = 'rotate(-20deg)';
+      setTimeout(() => {
+        chicken.style.bottom = '20px';
+        chicken.style.transform = 'rotate(0deg)';
+      }, 300);
+    }
+
+    function startGame() {
+      score = 0;
+      gameRunning = true;
+      startBtn.disabled = true;
+      scoreDisplay.textContent = 'Score: 0';
+
+      // Reset position
+      obstacle.style.animation = 'none';
+      void obstacle.offsetWidth;
+      obstacle.style.animation = 'moveObstacle 3s linear infinite';
+
+      collisionCheck = setInterval(() => {
+        const chickenRect = chicken.getBoundingClientRect();
+        const obstacleRect = obstacle.getBoundingClientRect();
+
+        if (
+          chickenRect.right > obstacleRect.left &&
+          chickenRect.left < obstacleRect.right &&
+          chickenRect.bottom > obstacleRect.top
+        ) {
+          endGame();
+        }
+      }, 50);
+
+      flapInterval = setInterval(() => {
+        if (gameRunning) {
+          score++;
+          scoreDisplay.textContent = 'Score: ' + score;
+        }
+      }, 1000);
+    }
+
+    function endGame() {
+      gameRunning = false;
+      clearInterval(flapInterval);
+      clearInterval(collisionCheck);
+      obstacle.style.animation = 'none';
+      scoreDisplay.textContent += ' - Game Over! 🐓💥';
+      startBtn.disabled = false;
+    }
+
+    // Keyboard and touch
+    document.addEventListener('keydown', e => {
+      if (e.code === 'Space') flap();
+    });
+
+    document.addEventListener('touchstart', flap);
+
+    startBtn.addEventListener('click', startGame);
+  </script>
+</body>
+
+</html>
