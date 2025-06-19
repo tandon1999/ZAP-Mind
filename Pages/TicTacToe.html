@@ -1,56 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tic Tac Toe</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #0e0e1a;
+      color: #f8fafc;
+      margin: 0;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       height: 100vh;
-      background-color: #f0f0f0;
     }
+
     h1 {
       margin-bottom: 20px;
+      color: #38bdf8;
     }
+
     .board {
       display: grid;
-      grid-template-columns: repeat(3, 100px);
-      grid-template-rows: repeat(3, 100px);
-      gap: 5px;
+      grid-template-columns: repeat(3, minmax(80px, 1fr));
+      grid-template-rows: repeat(3, minmax(80px, 1fr));
+      gap: 10px;
+      width: 90vw;
+      max-width: 360px;
+      transition: all 0.3s ease;
     }
+
     .cell {
-      width: 100px;
-      height: 100px;
-      background-color: white;
+      width: 100%;
+      aspect-ratio: 1;
+      background-color: #1a1a2e;
+      color: #38bdf8;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 2.5rem;
       cursor: pointer;
       border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+      border: 2px solid #252545;
+      transition: background 0.2s, transform 0.2s;
     }
+
     .cell:hover {
-      background-color: #e8e8e8;
+      background-color: #252545;
+      transform: scale(1.05);
     }
+
+    .win {
+      background-color: #38bdf8 !important;
+      color: #0e0e1a !important;
+      animation: glow 1s infinite alternate;
+    }
+
+    @keyframes glow {
+      0% { box-shadow: 0 0 10px #38bdf8; }
+      100% { box-shadow: 0 0 20px #38bdf8, 0 0 30px #38bdf8; }
+    }
+
     .status {
       margin-top: 20px;
       font-size: 1.2rem;
     }
+
     button {
-      margin-top: 10px;
-      padding: 10px 20px;
+      margin-top: 15px;
+      padding: 10px 24px;
       font-size: 1rem;
       cursor: pointer;
-      border-radius: 6px;
-      background-color: #e4ff00;
-      border: none;
+      border-radius: 8px;
+      background-color: #38bdf8;
+      color: #0e0e1a;
       font-weight: bold;
+      border: none;
+      box-shadow: 0 4px 8px rgba(56, 189, 248, 0.3);
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+
+    @media (max-width: 400px) {
+      .cell {
+        font-size: 2rem;
+      }
     }
   </style>
 </head>
@@ -60,9 +105,13 @@
   <div class="status" id="status"></div>
   <button onclick="resetGame()">Reset Game</button>
 
+  <!-- Optional click sound -->
+  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_733a2cf937.mp3?filename=click-124467.mp3" preload="auto"></audio>
+
   <script>
     const board = document.getElementById("board");
     const status = document.getElementById("status");
+    const clickSound = document.getElementById("clickSound");
     let currentPlayer = "X";
     let cells = Array(9).fill("");
     let gameOver = false;
@@ -77,17 +126,23 @@
         cell.addEventListener("click", handleCellClick);
         board.appendChild(cell);
       });
-      status.textContent = `Current Player: ${currentPlayer}`;
+      updateStatus();
+    }
+
+    function updateStatus() {
+      status.innerHTML = `Current Player: <span style="color: ${currentPlayer === 'X' ? '#38bdf8' : '#f472b6'}">${currentPlayer}</span>`;
     }
 
     function handleCellClick(e) {
       const index = e.target.dataset.index;
       if (cells[index] !== "" || gameOver) return;
+      clickSound.play();
       cells[index] = currentPlayer;
       e.target.textContent = currentPlayer;
       if (checkWinner()) {
-        status.textContent = `${currentPlayer} wins!`;
+        status.innerHTML = `<span style="color:#38bdf8">${currentPlayer}</span> wins! 🎉`;
         gameOver = true;
+        highlightWinnerCells();
         return;
       }
       if (!cells.includes("")) {
@@ -96,26 +151,46 @@
         return;
       }
       currentPlayer = currentPlayer === "X" ? "O" : "X";
-      status.textContent = `Current Player: ${currentPlayer}`;
+      updateStatus();
     }
 
     function checkWinner() {
       const winPatterns = [
-        [0, 1, 2], [3, 4, 5], [6, 7, 8],
-        [0, 3, 6], [1, 4, 7], [2, 5, 8],
-        [0, 4, 8], [2, 4, 6],
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
       ];
       return winPatterns.some(pattern => {
-        const [a, b, c] = pattern;
+        const [a,b,c] = pattern;
         return cells[a] && cells[a] === cells[b] && cells[a] === cells[c];
       });
     }
 
+    function highlightWinnerCells() {
+      const winPatterns = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+      ];
+      winPatterns.forEach(pattern => {
+        const [a,b,c] = pattern;
+        if (cells[a] && cells[a] === cells[b] && cells[a] === cells[c]) {
+          [a,b,c].forEach(i => {
+            document.querySelector(`.cell[data-index='${i}']`).classList.add("win");
+          });
+        }
+      });
+    }
+
     function resetGame() {
-      cells = Array(9).fill("");
-      currentPlayer = "X";
-      gameOver = false;
-      createBoard();
+      board.classList.add("fade-out");
+      setTimeout(() => {
+        cells = Array(9).fill("");
+        currentPlayer = "X";
+        gameOver = false;
+        createBoard();
+        board.classList.remove("fade-out");
+      }, 300);
     }
 
     createBoard();
