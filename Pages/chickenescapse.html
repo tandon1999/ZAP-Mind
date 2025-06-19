@@ -7,101 +7,117 @@
   <title>Chicken Escape</title>
   <style>
     * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #d0f4ff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      overflow: hidden;
-    }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #0e0e1a;
+  color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  overflow: hidden;
+  padding: 20px;
+}
 
-    h1 {
-      margin: 20px 0;
-      font-size: 2rem;
-      color: #333;
-    }
+h1 {
+  font-size: 2rem;
+  color: #38bdf8;
+  margin-bottom: 20px;
+  text-align: center;
+}
 
-    #gameContainer {
-      position: relative;
-      background: #f5ffe0;
-      width: 90vw;
-      max-width: 600px;
-      height: 300px;
-      border: 4px solid #ffb347;
-      border-radius: 15px;
-      overflow: hidden;
-    }
+#gameContainer {
+  position: relative;
+  background: #1f2937;
+  width: 90vw;
+  max-width: 600px;
+  height: 300px;
+  border: 4px solid #e4ff00;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 0 20px rgba(228, 255, 0, 0.2);
+}
 
-    #chicken {
-      position: absolute;
-      bottom: 20px;
-      left: 20px;
-      font-size: 2.5rem;
-      transform: rotate(0deg);
-      transition: transform 0.2s ease, bottom 0.2s ease;
-    }
+#chicken {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  font-size: 2.8rem;
+  transition: transform 0.2s ease, bottom 0.2s ease;
+  animation: floaty 2s ease-in-out infinite;
+}
 
-    #obstacle {
-      position: absolute;
-      bottom: 20px;
-      right: -60px;
-      font-size: 2rem;
-      animation: moveObstacle 3s linear infinite;
-    }
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
 
-    @keyframes moveObstacle {
-      0% {
-        right: -60px;
-      }
+#obstacle {
+  position: absolute;
+  bottom: 20px;
+  right: -60px;
+  font-size: 2.2rem;
+  animation: moveObstacle 3s linear infinite;
+}
 
-      100% {
-        right: 100%;
-      }
-    }
+@keyframes moveObstacle {
+  0% {
+    right: -60px;
+  }
 
-    #score {
-      margin-top: 10px;
-      font-size: 1.2rem;
-      color: #333;
-    }
+  100% {
+    right: 100%;
+  }
+}
 
-    button {
-      margin-top: 15px;
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #ff9800;
-      border: none;
-      border-radius: 8px;
-      color: white;
-      cursor: pointer;
-    }
+#score {
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #f8fafc;
+}
 
-    button:disabled {
-      background: #ffc966;
-      cursor: not-allowed;
-    }
+button {
+  margin-top: 15px;
+  padding: 12px 24px;
+  font-size: 1rem;
+  background-color: #e4ff00;
+  border: none;
+  border-radius: 10px;
+  color: #0e0e1a;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s ease;
+}
 
-    @media (max-width: 600px) {
-      #gameContainer {
-        height: 220px;
-      }
+button:hover {
+  background-color: #d1ec00;
+}
 
-      #chicken {
-        font-size: 2rem;
-      }
+button:disabled {
+  background: #999;
+  cursor: not-allowed;
+}
 
-      #obstacle {
-        font-size: 1.5rem;
-      }
-    }
+@media (max-width: 600px) {
+  #gameContainer {
+    height: 220px;
+  }
+
+  #chicken {
+    font-size: 2.2rem;
+  }
+
+  #obstacle {
+    font-size: 1.6rem;
+  }
+}
+
   </style>
 </head>
 

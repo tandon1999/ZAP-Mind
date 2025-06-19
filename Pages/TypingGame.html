@@ -7,106 +7,125 @@
     <title>Typing Game - Paragraph</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
-            background: #f7f7f7;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
-        }
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 30px 20px;
+    background-color: #0e0e1a;
+    color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
 
-        h1 {
-            margin-bottom: 20px;
-        }
+h1 {
+    margin-bottom: 25px;
+    font-size: 2rem;
+    color: #38bdf8;
+    text-align: center;
+}
 
-        #paragraph {
-            max-width: 600px;
-            padding: 20px;
-            background: white;
-            border-radius: 10px;
-            font-size: 1.2rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            user-select: none;
-        }
+#paragraph {
+    max-width: 700px;
+    padding: 20px;
+    background: #1f2937;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    line-height: 1.8;
+    margin-bottom: 20px;
+    user-select: none;
+    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+    border: 1px solid #334155;
+}
 
-        #inputArea {
-            width: 600px;
-            height: 150px;
-            padding: 10px;
-            font-size: 1.2rem;
-            border-radius: 8px;
-            border: 2px solid #ccc;
-            outline: none;
-            resize: none;
-        }
+#inputArea {
+    width: 700px;
+    max-width: 90%;
+    height: 150px;
+    padding: 14px;
+    font-size: 1.1rem;
+    border-radius: 10px;
+    border: none;
+    background-color: #0f172a;
+    color: #f8fafc;
+    outline: none;
+    resize: none;
+    box-shadow: 0 0 0 2px #334155;
+    transition: box-shadow 0.2s ease;
+}
 
+#inputArea.correct {
+    box-shadow: 0 0 0 2px #22c55e;
+}
 
-        #inputArea.correct {
-            border-color: green;
-        }
+#inputArea.incorrect {
+    box-shadow: 0 0 0 2px #f91d16;
+}
 
-        #inputArea.incorrect {
-            border-color: orange;
-        }
+.correct-char {
+    color: #22c55e;
+    font-weight: bold;
+}
 
-        #results {
-            margin-top: 30px;
-            font-size: 1.2rem;
-        }
+.incorrect-char {
+    color: #f91d16;
+    text-decoration: underline;
+}
 
-        #restartBtn {
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 1rem;
-            border: none;
-            border-radius: 6px;
-            background-color: #4caf50;
-            color: white;
-            cursor: pointer;
-        }
+#results {
+    margin-top: 30px;
+    font-size: 1.2rem;
+    min-height: 100px;
+}
 
-        .correct-char {
-            color: green;
-        }
+#restartBtn {
+    /* margin-top: 20px; */
+    padding: 12px 24px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 8px;
+    background-color: #38bdf8;
+    color: #0f172a;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+}
 
-        .incorrect-char {
-            color: orange;
-        }
+#restartBtn:hover {
+    background-color: #0ea5e9;
+}
 
-        .results-container {
-            background: #e0ffe0;
-            border: 2px solid #4caf50;
-            padding: 20px 30px;
-            border-radius: 12px;
-            max-width: 400px;
-            margin: 20px auto;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(76, 175, 80, 0.3);
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #2e7d32;
-        }
+.results-container {
+    background: #1e3a8a;
+    border: 2px solid #3b82f6;
+    padding: 25px 35px;
+    border-radius: 12px;
+    max-width: 400px;
+    margin: 20px auto;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #facc15;
+}
 
-        .results-container h2 {
-            margin-bottom: 15px;
-            font-weight: 700;
-            font-size: 1.8rem;
-        }
+.results-container h2 {
+    margin-bottom: 15px;
+    font-size: 1.6rem;
+}
 
-        .results-container p {
-            font-size: 1.2rem;
-            margin: 8px 0;
-        }
+.results-container p {
+    font-size: 1.1rem;
+    margin: 10px 0;
+}
 
-        .results-container p strong {
-            color: #1b5e20;
-        }
+.results-container strong {
+    color: #fcd34d;
+}
 
-        .results-container p span {
-            font-weight: 600;
-            color: #388e3c;
-        }
+.results-container span {
+    color: #fde68a;
+    font-weight: bold;
+}
+
     </style>
 </head>
 
@@ -116,7 +135,7 @@
 
     <div id="paragraph"></div>
 
-    <input type="textatea" id="inputArea" placeholder="Start typing here..." autocomplete="off" autofocus />
+    <textarea id="inputArea" placeholder="Start typing here..." autocomplete="off" autofocus></textarea>
 
     <div id="results"></div>
 
