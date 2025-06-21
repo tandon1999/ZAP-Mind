@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Multitasking Game</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      margin-top: 20px;
+      color: #333;
+    }
+
+    p {
+      font-size: 18px;
+      color: #444;
+    }
+
+    #game-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      margin: 20px;
+    }
+
+    .game-box {
+      background: #fff;
+      width: 30%;
+      height: 80vh;
+      border: 2px solid #aaa;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin: 10px;
+      padding: 10px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    input {
+      width: 80%;
+      padding: 10px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      margin-top: 10px;
+    }
+
+    #falling-block {
+      width: 30px;
+      height: 30px;
+      background: linear-gradient(45deg, red, orange);
+      border-radius: 6px;
+      position: absolute;
+      top: 0;
+      left: calc(50% - 15px);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+      transition: top 0.05s linear;
+      animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+      from {
+        transform: scale(1);
+        box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+      }
+      to {
+        transform: scale(1.1);
+        box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+      }
+    }
+
+    .footer {
+      margin: 30px;
+    }
+
+    button {
+      background-color: #0077ff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    button:hover {
+      background-color: #005bcc;
+    }
+
+    #result-screen {
+      display: none;
+      padding: 20px;
+    }
+
+    #score-chart {
+      max-width: 600px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 Multitasking Challenge</h1>
+  <p>Test your ability to manage multiple tasks at once. Stay focused!</p>
+
+  <div id="game-container">
+    <div id="falling-block-game" class="game-box"></div>
+    <div id="typing-game" class="game-box">
+      <p id="typing-word">Press Start</p>
+      <input type="text" id="typing-input" autocomplete="off" />
+    </div>
+    <div id="math-game" class="game-box">
+      <p id="math-question">Ready?</p>
+      <input type="text" id="math-answer" autocomplete="off" />
+    </div>
+  </div>
+
+  <div class="footer">
+    <button onclick="startGame()">🚀 Start Game</button>
+    <p id="score">Score: 0</p>
+  </div>
+
+  <div id="result-screen">
+    <h2>Your Score: <span id="final-score"></span></h2>
+    <canvas id="score-chart"></canvas>
+    <br /><br />
+    <button onclick="restartGame()">Try Again</button>
+  </div>
+
+  <script>
+    let score = 0;
+    let fallingBlockInterval;
+    let typingWords = ["focus", "alert", "speed", "logic", "quick"];
+    let currentWord = "";
+    let correctAnswer = 0;
+
+    function updateScore() {
+      document.getElementById("score").innerText = "Score: " + score;
+    }
+
+    function startFallingBlock() {
+      const blockGame = document.getElementById("falling-block-game");
+      blockGame.innerHTML = "";
+      const block = document.createElement("div");
+      block.id = "falling-block";
+      blockGame.appendChild(block);
+
+      let pos = 0;
+      fallingBlockInterval = setInterval(() => {
+        if (pos >= blockGame.offsetHeight - 30) {
+          stopGame();
+        } else {
+          pos += 5;
+          block.style.top = pos + "px";
+        }
+      }, 50);
+
+      window.addEventListener("keydown", e => {
+        if (e.key === "ArrowDown" && pos >= blockGame.offsetHeight - 100) {
+          score++;
+          updateScore();
+          pos = 0;
+        }
+      });
+    }
+
+    function startTypingGame() {
+      generateWord();
+      const input = document.getElementById("typing-input");
+      input.value = "";
+      input.addEventListener("input", e => {
+        if (e.target.value === currentWord) {
+          score++;
+          updateScore();
+          e.target.value = "";
+          generateWord();
+        }
+      });
+    }
+
+    function generateWord() {
+      currentWord = typingWords[Math.floor(Math.random() * typingWords.length)];
+      document.getElementById("typing-word").innerText = currentWord;
+    }
+
+    function startMathGame() {
+      generateMath();
+      const input = document.getElementById("math-answer");
+      input.value = "";
+      input.addEventListener("input", e => {
+        if (parseInt(e.target.value) === correctAnswer) {
+          score++;
+          updateScore();
+          e.target.value = "";
+          generateMath();
+        }
+      });
+    }
+
+    function generateMath() {
+      let a = Math.floor(Math.random() * 10);
+      let b = Math.floor(Math.random() * 10);
+      correctAnswer = a + b;
+      document.getElementById("math-question").innerText = `${a} + ${b} = ?`;
+    }
+
+    function startGame() {
+      score = 0;
+      updateScore();
+      startFallingBlock();
+      startTypingGame();
+      startMathGame();
+    }
+
+    function stopGame() {
+      clearInterval(fallingBlockInterval);
+      showResultScreen(score);
+    }
+
+    function showResultScreen(finalScore) {
+      let scores = JSON.parse(localStorage.getItem("scores")) || [];
+      const now = new Date();
+      scores.push({ time: now.toISOString(), score: finalScore });
+      scores = scores.filter(s => new Date(s.time) >= new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
+      localStorage.setItem("scores", JSON.stringify(scores));
+
+      document.getElementById("game-container").style.display = "none";
+      document.querySelector(".footer").style.display = "none";
+
+      document.getElementById("result-screen").style.display = "block";
+      document.getElementById("final-score").innerText = finalScore;
+
+      renderChart(scores);
+    }
+
+    function renderChart(scores) {
+      const ctx = document.getElementById("score-chart").getContext("2d");
+      const labels = scores.map(s => new Date(s.time).toLocaleDateString("en-GB"));
+      const data = scores.map(s => s.score);
+
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Score',
+            data: data,
+            backgroundColor: '#4CAF50'
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: { display: false }
+          },
+          scales: {
+            y: { beginAtZero: true }
+          }
+        }
+      });
+    }
+
+    function restartGame() {
+      window.location.reload();
+    }
+  </script>
+</body>
+</html>

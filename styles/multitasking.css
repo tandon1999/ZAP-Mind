@@ -1,0 +1,89 @@
+body {
+  font-family: 'Segoe UI', sans-serif;
+  text-align: center;
+  background: linear-gradient(to right, #f0f8ff, #e6f7ff);
+  margin: 0;
+  padding: 0;
+}
+
+h1 {
+  margin-top: 20px;
+  color: #333;
+}
+
+p {
+  font-size: 18px;
+  color: #444;
+}
+
+#game-container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  margin: 20px;
+}
+
+.game-box {
+  background: #fff;
+  width: 30%;
+  height: 80vh; /* SCREEN HEIGHT approx */
+  border: 2px solid #aaa;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  margin: 10px;
+  padding: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+input {
+  width: 80%;
+  padding: 10px;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+#falling-block {
+  width: 30px;
+  height: 30px;
+  background: linear-gradient(45deg, red, orange);
+  border-radius: 6px;
+  position: absolute;
+  top: 0;
+  left: calc(50% - 15px);
+  box-shadow: 0 0 15px rgba(255, 0, 0, 0.6);
+  transition: top 0.05s linear;
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
+  from {
+    transform: scale(1);
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+  }
+  to {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+  }
+}
+
+.footer {
+  margin: 30px;
+}
+
+button {
+  background-color: #0077ff;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+button:hover {
+  background-color: #005bcc;
+}
