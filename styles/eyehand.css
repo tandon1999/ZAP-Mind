@@ -1,0 +1,126 @@
+body {
+      margin: 0;
+      padding: 20px;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #111;
+      color: #fff;
+    }
+    #game-container {
+      position: relative;
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      background: #003300;
+      border: 2px solid #444;
+      margin: 30px auto;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 12px rgba(0, 255, 0, 0.3);
+    }
+    #target-circle {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border: 3px dashed white;
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+    }
+    #cross-lines {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    #cross-lines::before, #cross-lines::after {
+      content: "";
+      position: absolute;
+      background: black;
+    }
+    #cross-lines::before {
+      width: 20px;
+      height: 100%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+    #cross-lines::after {
+      height: 20px;
+      width: 100%;
+      top: 50%;
+      left: 0;
+      transform: translateY(-50%);
+    }
+    .dot {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      position: absolute;
+      z-index: 1;
+    }
+    .horizontal {
+      background-color: red;
+    }
+    .vertical {
+      background-color: lime;
+    }
+    #start-btn {
+      padding: 10px 20px;
+      font-size: 18px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+    #score-board, #timer-bar {
+      font-size: 20px;
+      margin-top: 20px;
+    }
+    #timer-bar {
+      width: 80%;
+      height: 15px;
+      background: #444;
+      margin: 10px auto;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    #timer-fill {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #00ff00, #ffff00, #ff0000);
+      transition: width 1s linear;
+    }
+    #final-score {
+      display: none;
+      margin-top: 20px;
+      background: #222;
+      border-radius: 12px;
+      padding: 20px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    #final-score h2 {
+      color: #0f0;
+      font-size: 24px;
+    }
+    #stats-container {
+      max-width: 800px;
+      margin: 40px auto 0;
+      background: #222;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(255,255,255,0.1);
+    }
+    #stats-container h2 {
+      margin-bottom: 20px;
+      color: #0f0;
+    }

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../styles/eyehand.css" />
+    <title>Eye-Hand Coordination Game</title>
+</head>
+
+<body>
+    <h1>🎯 Eye-Hand Coordination Game</h1>
+    <div id="game-container">
+        <div id="target-circle"></div>
+        <div id="cross-lines"></div>
+    </div>
+    <div id="timer-bar">
+        <div id="timer-fill"></div>
+    </div>
+    <button id="start-btn">Start Game</button>
+    <div id="score-board">Score: 0</div>
+    <div id="final-score">
+        <h2>Game Over!</h2>
+        <p>Your final score is: <span id="score-result">0</span></p>
+    </div>
+    <div id="stats-container" style="display:none;">
+        <h2>Last 30 Days Game Stats</h2>
+        <canvas id="stats-chart" width="800" height="300"></canvas>
+    </div>
+
+
+    <audio id="ding" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <audio id="ding" src="https://www.soundjay.com/button/beep-07.wav"></audio>
+    <script src="../js/eyehand.js"></script>
+</body>
+
+</html>

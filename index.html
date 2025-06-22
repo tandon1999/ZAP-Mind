@@ -20,7 +20,7 @@
         <button>Get Started</button> -->
         <div class="header-title">Measure your abilities with brain games and cognitive tests.</div>
     </section>
-    
+
 
     <section class="bento-container">
         <div class="bento-box" onclick="openGame(this)" data-type="reaction">
@@ -79,6 +79,13 @@
                 <p>Challenge your short-term memory</p>
             </div>
         </div>
+                <div class="bento-box" onclick="openGame(this)" data-type="eyehand">
+            <img src="images/eyehand.png" alt="Eye Hand" class="game-icon" />
+            <div class="game-details">
+                <h3>Eye Hand</h3>
+                <p>Test your eye-hand coordination and memory skills.</p>
+            </div>
+        </div>
     </section>
 
 </body>
@@ -113,6 +120,9 @@
                 break;
             case 'memorytester':
                 url = "./Pages/MemoryTester.html";
+                break;
+            case 'eyehand':
+                url = "./Pages/EyeHand.html";
                 break;
             default:
                 alert("Unknown game type!");
