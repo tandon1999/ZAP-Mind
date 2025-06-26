@@ -7,125 +7,124 @@
     <title>Typing Game - Paragraph</title>
     <style>
         body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 30px 20px;
-    background-color: #0e0e1a;
-    color: #f8fafc;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-}
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 30px 20px;
+            background-color: #0e0e1a;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
 
-h1 {
-    margin-bottom: 25px;
-    font-size: 2rem;
-    color: #38bdf8;
-    text-align: center;
-}
+        h1 {
+            margin-bottom: 25px;
+            font-size: 2rem;
+            color: #38bdf8;
+            text-align: center;
+        }
 
-#paragraph {
-    max-width: 700px;
-    padding: 20px;
-    background: #1f2937;
-    border-radius: 12px;
-    font-size: 1.2rem;
-    line-height: 1.8;
-    margin-bottom: 20px;
-    user-select: none;
-    box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
-    border: 1px solid #334155;
-}
+        #paragraph {
+            max-width: 700px;
+            padding: 20px;
+            background: #1f2937;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            user-select: none;
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+            border: 1px solid #334155;
+        }
 
-#inputArea {
-    width: 700px;
-    max-width: 90%;
-    height: 150px;
-    padding: 14px;
-    font-size: 1.1rem;
-    border-radius: 10px;
-    border: none;
-    background-color: #0f172a;
-    color: #f8fafc;
-    outline: none;
-    resize: none;
-    box-shadow: 0 0 0 2px #334155;
-    transition: box-shadow 0.2s ease;
-}
+        #inputArea {
+            width: 700px;
+            max-width: 90%;
+            height: 150px;
+            padding: 14px;
+            font-size: 1.1rem;
+            border-radius: 10px;
+            border: none;
+            background-color: #0f172a;
+            color: #f8fafc;
+            outline: none;
+            resize: none;
+            box-shadow: 0 0 0 2px #334155;
+            transition: box-shadow 0.2s ease;
+        }
 
-#inputArea.correct {
-    box-shadow: 0 0 0 2px #22c55e;
-}
+        #inputArea.correct {
+            box-shadow: 0 0 0 2px #22c55e;
+        }
 
-#inputArea.incorrect {
-    box-shadow: 0 0 0 2px #f91d16;
-}
+        #inputArea.incorrect {
+            box-shadow: 0 0 0 2px #f91d16;
+        }
 
-.correct-char {
-    color: #22c55e;
-    font-weight: bold;
-}
+        .correct-char {
+            color: #22c55e;
+            font-weight: bold;
+        }
 
-.incorrect-char {
-    color: #f91d16;
-    text-decoration: underline;
-}
+        .incorrect-char {
+            color: #f91d16;
+            text-decoration: underline;
+        }
 
-#results {
-    margin-top: 30px;
-    font-size: 1.2rem;
-    min-height: 100px;
-}
+        #results {
+            margin-top: 30px;
+            font-size: 1.2rem;
+            min-height: 100px;
+        }
 
-#restartBtn {
-    /* margin-top: 20px; */
-    padding: 12px 24px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    background-color: #38bdf8;
-    color: #0f172a;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.2s ease;
-}
+        #restartBtn {
+            /* margin-top: 20px; */
+            padding: 12px 24px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 8px;
+            background-color: #38bdf8;
+            color: #0f172a;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s ease;
+        }
 
-#restartBtn:hover {
-    background-color: #0ea5e9;
-}
+        #restartBtn:hover {
+            background-color: #0ea5e9;
+        }
 
-.results-container {
-    background: #1e3a8a;
-    border: 2px solid #3b82f6;
-    padding: 25px 35px;
-    border-radius: 12px;
-    max-width: 400px;
-    margin: 20px auto;
-    text-align: center;
-    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #facc15;
-}
+        .results-container {
+            background: #1e3a8a;
+            border: 2px solid #3b82f6;
+            padding: 25px 35px;
+            border-radius: 12px;
+            max-width: 400px;
+            margin: 20px auto;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #facc15;
+        }
 
-.results-container h2 {
-    margin-bottom: 15px;
-    font-size: 1.6rem;
-}
+        .results-container h2 {
+            margin-bottom: 15px;
+            font-size: 1.6rem;
+        }
 
-.results-container p {
-    font-size: 1.1rem;
-    margin: 10px 0;
-}
+        .results-container p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+        }
 
-.results-container strong {
-    color: #fcd34d;
-}
+        .results-container strong {
+            color: #fcd34d;
+        }
 
-.results-container span {
-    color: #fde68a;
-    font-weight: bold;
-}
-
+        .results-container span {
+            color: #fde68a;
+            font-weight: bold;
+        }
     </style>
 </head>
 

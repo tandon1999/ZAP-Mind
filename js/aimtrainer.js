@@ -28,7 +28,7 @@ function playClickSound() {
     osc.stop(audioCtx.currentTime + 0.1);
 }
 
-const emojis = ['🐰', '⭐', '🔥', '⚡', '😊', '🐱', '🍀', '🌟', '🎯'];
+const emojis = ['🐰', '⭐', '⚡', '🐱', '🎯'];
 
 target.style.display = 'none';
 

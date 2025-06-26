@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tic Tac Toe</title>
+  <meta name="description" content="Play Tic Tac Toe – A fun game to test your strategy skills!" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -105,13 +106,45 @@
   <div class="status" id="status"></div>
   <button onclick="resetGame()">Reset Game</button>
 
-  <!-- Optional click sound -->
-  <audio id="clickSound" src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_733a2cf937.mp3?filename=click-124467.mp3" preload="auto"></audio>
-
   <script>
     const board = document.getElementById("board");
     const status = document.getElementById("status");
-    const clickSound = document.getElementById("clickSound");
+
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playClickTone(player) {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+
+      osc.type = player === 'X' ? 'square' : 'sine';
+      osc.frequency.setValueAtTime(player === 'X' ? 500 : 800, audioCtx.currentTime);
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+
+      osc.start();
+      osc.stop(audioCtx.currentTime + 0.1);
+    }
+
+function playWinSound() {
+  const notes = [880, 1046, 1318, 1567]; // ascending tone pattern
+  let time = audioCtx.currentTime;
+
+  notes.forEach((freq, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.setValueAtTime(freq, time + i * 0.15);
+    osc.type = 'triangle';
+    gain.gain.setValueAtTime(0.3, time + i * 0.15);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start(time + i * 0.15);
+    osc.stop(time + i * 0.15 + 0.2);
+  });
+}
+
+
     let currentPlayer = "X";
     let cells = Array(9).fill("");
     let gameOver = false;
@@ -136,20 +169,26 @@
     function handleCellClick(e) {
       const index = e.target.dataset.index;
       if (cells[index] !== "" || gameOver) return;
-      clickSound.play();
+
+      playClickTone(currentPlayer);
+
       cells[index] = currentPlayer;
       e.target.textContent = currentPlayer;
+
       if (checkWinner()) {
         status.innerHTML = `<span style="color:#38bdf8">${currentPlayer}</span> wins! 🎉`;
+        playWinSound(currentPlayer);
         gameOver = true;
         highlightWinnerCells();
         return;
       }
+
       if (!cells.includes("")) {
         status.textContent = "It's a draw!";
         gameOver = true;
         return;
       }
+
       currentPlayer = currentPlayer === "X" ? "O" : "X";
       updateStatus();
     }
